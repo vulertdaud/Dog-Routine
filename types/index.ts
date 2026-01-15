@@ -17,6 +17,7 @@ export interface RoutineTask {
   timeOfDay: TimeOfDay;
   frequency: Frequency;
   weekdays: string[];
+  subtasks: string[];
   notes?: string;
   priority: Priority;
   reminderTime?: string;
