@@ -32,6 +32,10 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+## 🤖 Auto-merge PRs
+
+This repo includes a GitHub Actions workflow that enables auto-merge for pull requests labeled `automerge`. Ensure the repository setting **Allow auto-merge** is enabled, then add the `automerge` label to eligible PRs to have them merged (squash) once required checks and reviews pass.
+
 ## 🗂️ Project Structure
 
 ```
