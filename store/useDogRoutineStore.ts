@@ -19,6 +19,7 @@ interface DogRoutineState {
   markAllDone: (dateISO: string) => void;
   resetDay: (dateISO: string) => void;
   updateLogNote: (dateISO: string, taskId: string, note: string) => void;
+  updateAllLogNotes: (dateISO: string, note: string) => void;
   getLogForDate: (dateISO: string) => DailyLog;
 }
 
@@ -124,6 +125,17 @@ export const useDogRoutineStore = create<DogRoutineState>()(
             items: log.items.map((item) =>
               item.taskId === taskId ? { ...item, note } : item
             ),
+          };
+          return {
+            logs: [updatedLog, ...state.logs.filter((entry) => entry.dateISO !== dateISO)],
+          };
+        }),
+      updateAllLogNotes: (dateISO, note) =>
+        set((state) => {
+          const log = getOrCreateLog(state.logs, dateISO, state.tasks);
+          const updatedLog = {
+            ...log,
+            items: log.items.map((item) => ({ ...item, note })),
           };
           return {
             logs: [updatedLog, ...state.logs.filter((entry) => entry.dateISO !== dateISO)],

@@ -8,15 +8,24 @@ import { TaskGroup } from "@/components/task-group";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { timeOfDayOrder } from "@/lib/date";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function TodayPage() {
-  const { tasks, getLogForDate, toggleTaskCompletion, markAllDone, resetDay, updateLogNote } =
-    useDogRoutineStore();
+  const {
+    tasks,
+    getLogForDate,
+    toggleTaskCompletion,
+    markAllDone,
+    resetDay,
+    updateLogNote,
+    updateAllLogNotes,
+  } = useDogRoutineStore();
   const dateISO = getTodayISO();
   const log = getLogForDate(dateISO);
   const { toast } = useToast();
+  const [allNote, setAllNote] = React.useState("");
 
   const activeTasks = tasks.filter((task) => task.isActive);
 
@@ -44,6 +53,14 @@ export default function TodayPage() {
   const handleNote = (taskId: string, note: string) => {
     updateLogNote(dateISO, taskId, note);
     toast({ title: "Note saved", description: "Your update is stored for today." });
+  };
+
+  const handleApplyAllNotes = () => {
+    updateAllLogNotes(dateISO, allNote);
+    toast({
+      title: "Notes applied",
+      description: "Your note was added to all of today's tasks.",
+    });
   };
 
   return (
@@ -95,6 +112,33 @@ export default function TodayPage() {
           <div className="rounded-2xl bg-secondary px-4 py-3 text-sm text-muted-foreground">
             Keep it light and joyful. Small wins build strong habits.
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-end md:justify-between">
+          <div className="flex-1 space-y-2">
+            <p className="text-sm font-medium text-foreground">Shared note</p>
+            <Textarea
+              value={allNote}
+              onChange={(event) => setAllNote(event.target.value)}
+              placeholder="Add a note to apply to every task today."
+              className="min-h-[96px]"
+            />
+            <p className="text-xs text-muted-foreground">
+              This will overwrite existing task notes for today.
+            </p>
+          </div>
+          <ConfirmDialog
+            trigger={
+              <Button className="rounded-full md:mt-0" disabled={log.items.length === 0}>
+                Apply note to all tasks
+              </Button>
+            }
+            title="Apply this note to every task?"
+            description="This will replace all existing task notes for today."
+            onConfirm={handleApplyAllNotes}
+          />
         </CardContent>
       </Card>
 
