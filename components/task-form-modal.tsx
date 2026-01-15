@@ -31,12 +31,14 @@ export function TaskFormModal({ open, onOpenChange, onSubmit, task }: TaskFormMo
       timeOfDay: "Morning",
       frequency: "Daily",
       weekdays: weekdays,
+      subtasks: [],
       notes: "",
       priority: "Medium",
       reminderTime: "",
       isActive: true,
     }
   );
+  const [subtaskInput, setSubtaskInput] = React.useState("");
 
   React.useEffect(() => {
     if (task) {
@@ -62,6 +64,20 @@ export function TaskFormModal({ open, onOpenChange, onSubmit, task }: TaskFormMo
     if (value === "Daily") {
       updateField("weekdays", weekdays);
     }
+  };
+
+  const handleAddSubtask = () => {
+    const trimmed = subtaskInput.trim();
+    if (!trimmed) return;
+    updateField("subtasks", [...form.subtasks, trimmed]);
+    setSubtaskInput("");
+  };
+
+  const handleRemoveSubtask = (index: number) => {
+    updateField(
+      "subtasks",
+      form.subtasks.filter((_, currentIndex) => currentIndex !== index)
+    );
   };
 
   const handleSubmit = () => {
@@ -179,6 +195,38 @@ export function TaskFormModal({ open, onOpenChange, onSubmit, task }: TaskFormMo
               onChange={(event) => updateField("notes", event.target.value)}
               placeholder="Extra care or instructions"
             />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="subtasks">Subtasks</Label>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Input
+                id="subtasks"
+                value={subtaskInput}
+                onChange={(event) => setSubtaskInput(event.target.value)}
+                placeholder="Add a subtask"
+              />
+              <Button type="button" variant="outline" onClick={handleAddSubtask}>
+                Add subtask
+              </Button>
+            </div>
+            {form.subtasks.length ? (
+              <div className="flex flex-wrap gap-2">
+                {form.subtasks.map((subtask, index) => (
+                  <Button
+                    key={`${subtask}-${index}`}
+                    type="button"
+                    variant="secondary"
+                    className="px-3"
+                    onClick={() => handleRemoveSubtask(index)}
+                  >
+                    {subtask}
+                  </Button>
+                ))}
+              </div>
+            ) : null}
+            <p className="text-xs text-muted-foreground">
+              Click a subtask chip to remove it.
+            </p>
           </div>
           <div className="flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

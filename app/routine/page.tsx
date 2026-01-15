@@ -63,6 +63,13 @@ export default function RoutinePage() {
                   <Badge variant="outline">{task.timeOfDay}</Badge>
                 </div>
                 <p className="text-sm text-muted-foreground">{task.notes}</p>
+                {task.subtasks.length ? (
+                  <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                    {task.subtasks.map((subtask) => (
+                      <li key={subtask}>{subtask}</li>
+                    ))}
+                  </ul>
+                ) : null}
                 <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                   <span>Priority: {task.priority}</span>
                   <span>Frequency: {task.frequency}</span>

@@ -47,6 +47,13 @@ export function TaskCard({ task, logItem, onToggle, onNote }: TaskCardProps) {
               <Badge variant="outline">{task.priority}</Badge>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">{task.notes}</p>
+            {task.subtasks.length ? (
+              <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-muted-foreground">
+                {task.subtasks.map((subtask) => (
+                  <li key={subtask}>{subtask}</li>
+                ))}
+              </ul>
+            ) : null}
             <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               {task.reminderTime ? (
                 <span className="flex items-center gap-1">
