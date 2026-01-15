@@ -21,6 +21,7 @@ interface TaskCardProps {
 export function TaskCard({ task, logItem, onToggle, onNote }: TaskCardProps) {
   const [note, setNote] = React.useState(logItem.note ?? "");
   const [showNote, setShowNote] = React.useState(false);
+  const subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
 
   React.useEffect(() => {
     setNote(logItem.note ?? "");
@@ -47,9 +48,9 @@ export function TaskCard({ task, logItem, onToggle, onNote }: TaskCardProps) {
               <Badge variant="outline">{task.priority}</Badge>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">{task.notes}</p>
-            {task.subtasks.length ? (
+            {subtasks.length ? (
               <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-muted-foreground">
-                {task.subtasks.map((subtask) => (
+                {subtasks.map((subtask) => (
                   <li key={subtask}>{subtask}</li>
                 ))}
               </ul>

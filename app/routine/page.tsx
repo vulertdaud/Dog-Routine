@@ -17,6 +17,8 @@ export default function RoutinePage() {
   const { toast } = useToast();
   const [open, setOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<RoutineTask | undefined>();
+  const getSubtasks = (task: RoutineTask) =>
+    Array.isArray(task.subtasks) ? task.subtasks : [];
 
   const handleEdit = (task: RoutineTask) => {
     setEditing(task);
@@ -63,9 +65,9 @@ export default function RoutinePage() {
                   <Badge variant="outline">{task.timeOfDay}</Badge>
                 </div>
                 <p className="text-sm text-muted-foreground">{task.notes}</p>
-                {task.subtasks.length ? (
+                {getSubtasks(task).length ? (
                   <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-                    {task.subtasks.map((subtask) => (
+                    {getSubtasks(task).map((subtask) => (
                       <li key={subtask}>{subtask}</li>
                     ))}
                   </ul>
